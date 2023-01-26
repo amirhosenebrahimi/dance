@@ -1,0 +1,35 @@
+# TODO: create DEV profile with h2 configured but set production config as a default
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          public-key-location: classpath:keys/public.pem
+  datasource:
+    username: dance
+    password: PZNH7rF78wE
+    url: jdbc:mariadb://localhost/dance
+  jpa:
+    hibernate:
+      ddl-auto: create
+    open-in-view: on
+    defer-datasource-initialization: on
+  sql:
+    init:
+      mode: always
+  mail:
+    username: sadeghabedi36@gmail.com
+    password: ktiltuheafahorli
+    host: smtp.gmail.com
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+keys:
+  pri: classpath:keys/private.pem
+  pub: classpath:keys/public.pem
+logging:
+  level:
+    root: debug
