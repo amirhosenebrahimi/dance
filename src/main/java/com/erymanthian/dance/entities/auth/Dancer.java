@@ -30,7 +30,6 @@ public class Dancer extends User {
     private EyeColor eyeColor;
     private Integer height;
 
-
     @ElementCollection
     @CollectionTable(name = "dancer_styles", joinColumns = @JoinColumn(name = "dancer_id"))
     @Column(name = "styles")
