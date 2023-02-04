@@ -1,5 +1,7 @@
 package com.erymanthian.dance.controllers;
 
+import com.erymanthian.dance.services.ConnectRequestService;
+import com.erymanthian.dance.services.MessageService;
 import com.erymanthian.dance.services.ProfileService;
 import com.erymanthian.dance.services.RegistrationService;
 import lombok.extern.java.Log;
@@ -27,6 +29,15 @@ public class ErrorHandler {
             ProfileService.UserNotFoundException.class,
             ProfileService.WrongTypeException.class})
     public ProblemDetail profileErrorHandler(Exception e) {
+        log.info(Arrays.toString(e.getStackTrace()));
+        log.warning(e.getMessage());
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getClass().getSimpleName());
+    }
+
+    @ExceptionHandler({
+            ConnectRequestService.ConnectionException.class,
+            MessageService.ConnectionException.class})
+    public ProblemDetail ConnectionErrorHandler(Exception e) {
         log.info(Arrays.toString(e.getStackTrace()));
         log.warning(e.getMessage());
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getClass().getSimpleName());
