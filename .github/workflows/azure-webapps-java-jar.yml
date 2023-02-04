@@ -23,6 +23,7 @@ env:
   AZURE_WEBAPP_NAME: dance            # set this to the name of your Azure Web App
   JAVA_VERSION: '17'                  # set this to the Java version to use
   DISTRIBUTION: temurin               # set this to the Java distribution
+  AZURE_RESOURCEGROUP_NAME: Dancer-Society
 
 on:
   push:
@@ -80,5 +81,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-#          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          resource-group-name: ${{ env.AZURE_RESOURCEGROUP_NAME }}
           package: '*.jar'
