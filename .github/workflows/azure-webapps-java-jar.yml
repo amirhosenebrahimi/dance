@@ -75,11 +75,13 @@ jobs:
         uses: Azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+
+      - name: deploy to production with artifact
+        uses: azure/spring-cloud-deploy@v1
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          resource-group-name: ${{ env.AZURE_RESOURCEGROUP_NAME }}
+          azure-subscription: a27ed898-40fa-41fa-b353-990a30ecb83d
+          action: Deploy
+          service-name: dance
+          app-name: dance
+          use-staging-deployment: false
           package: '*.jar'
