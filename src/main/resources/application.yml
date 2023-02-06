@@ -6,9 +6,9 @@ spring:
         jwt:
           public-key-location: classpath:keys/public.pem
   datasource:
-    username: dance
-    password: PZNH7rF78wE
-    url: jdbc:mariadb://localhost/dance
+    username: ${DB_NAME:dance}
+    password: ${DB_PASS:PZNH7rF78wE}
+    url: ${DB_URL:jdbc:mariadb://localhost/dance}
   jpa:
     hibernate:
       ddl-auto: create
@@ -27,6 +27,8 @@ spring:
           auth: true
           starttls:
             enable: true
+  profiles:
+    active: prod
 keys:
   pri: classpath:keys/private.pem
   pub: classpath:keys/public.pem
