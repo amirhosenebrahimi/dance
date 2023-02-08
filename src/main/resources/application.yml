@@ -6,7 +6,7 @@ spring:
         jwt:
           public-key-location: classpath:keys/public.pem
   datasource:
-    username: dance
+    username: root
     password: PZNH7rF78wE
     url: jdbc:mariadb://localhost/dance
   jpa:

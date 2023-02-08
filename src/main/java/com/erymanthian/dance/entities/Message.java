@@ -21,10 +21,13 @@ public class Message {
     private Long connectionId;
     private Long time;
 
-    public Message(String message, String file, Long connectionId, Long time) {
+    private Long userId;
+
+    public Message(String message, String file, Long connectionId, Long time, Long userId) {
         this.message = message;
         this.file = file;
         this.connectionId = connectionId;
         this.time = time;
+        this.userId = userId;
     }
 }

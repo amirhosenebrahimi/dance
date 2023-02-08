@@ -26,7 +26,7 @@ public class ConnectRequestService {
             if (!connect.isEmpty()) {
                 throw new ConnectionException();
             }
-            return connectRequestRepository.save(new ConnectRequest(userId, connectRequestCreateDTO.getTargetUser(), (short) 0));
+            return connectRequestRepository.save(new ConnectRequest(connectRequestCreateDTO.getTargetUser(), userId, (short) 0));
         } else throw new EventService.InvalidAuthenticationMethod();
     }
 
