@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -40,6 +41,11 @@ public class EventService {
             return event.getId();
         }
         throw new InvalidAuthenticationMethod();
+    }
+
+
+    public Optional<Event> findById(Integer id, Long companyId) {
+        return repository.findById(id).filter(event -> event.getCompanyId().equals(companyId));
     }
 
     public void addDescription(Authentication authentication, int id, DescriptionDto dto) {
@@ -109,7 +115,7 @@ public class EventService {
         } else throw new InvalidAuthenticationMethod();
     }
 
-    public void apply(Authentication authentication, int id) {
+  /*  public void apply(Authentication authentication, int id) {
         if (authentication instanceof JwtAuthenticationToken token) {
             Long userId = (Long) token.getTokenAttributes().get(TokenService.USER_ID);
             Event event = repository.findById(id).orElseThrow();
@@ -125,7 +131,7 @@ public class EventService {
             Event event = repository.findById(id).orElseThrow();
             return event.getDancers().stream().map(Dancer::getId).anyMatch(userId::equals);
         } else throw new InvalidAuthenticationMethod();
-    }
+    }*/
 
     @StandardException
     static class InvalidAuthenticationMethod extends RuntimeException {

@@ -35,9 +35,9 @@ public class ConnectionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(connectRequestService.create(authentication, connectRequestCreateDTO));
     }
 
-    @GetMapping("/my-request")
-    public ResponseEntity<List<ConnectRequest>> findMyRequest(Authentication authentication) {
-        return ResponseEntity.ok(connectRequestService.findMyRequest(authentication));
+    @GetMapping("/my-request/{eventId}")
+    public ResponseEntity<List<ConnectRequest>> findMyRequest(@PathVariable Integer eventId, Authentication authentication) {
+        return ResponseEntity.ok(connectRequestService.findMyRequest(eventId,authentication));
     }
 
     @PatchMapping("/change-status/request-id/{id}/{status}")

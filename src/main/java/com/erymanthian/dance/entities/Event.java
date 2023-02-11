@@ -54,9 +54,9 @@ public class Event {
     @Column(name = "gallery")
     private List<String> gallery;
 
-    @ToString.Exclude
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<Dancer> dancers = new HashSet<>();
+//    @ToString.Exclude
+//    @OneToMany(cascade = CascadeType.ALL)
+//    private Set<Dancer> dancers = new HashSet<>();
 
     public Event(Long companyId, String name, String state, String city) {
         this.companyId = companyId;

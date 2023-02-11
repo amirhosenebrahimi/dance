@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface ConnectRequestRepository extends JpaRepository<ConnectRequest, Long> {
 
-    List<ConnectRequest> findByTargetDancerAndSourceDancerAndStatusLessThan(Long targetUser, Long sourceUser, Short status);
+    List<ConnectRequest> findByEventIdAndSourceDancer(Integer targetUser, Long sourceUser);
 
-    List<ConnectRequest> findByTargetDancerOrSourceDancer(Long targetDancer, Long sourceDancer);
+    List<ConnectRequest> findByEventId(Integer eventId);
 
 }

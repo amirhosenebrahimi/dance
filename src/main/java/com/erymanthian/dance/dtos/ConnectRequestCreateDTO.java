@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class ConnectRequestCreateDTO {
 
-    private Long targetUser;
+    private Integer eventId;
 }

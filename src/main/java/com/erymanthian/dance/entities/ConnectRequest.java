@@ -1,11 +1,9 @@
 package com.erymanthian.dance.entities;
 
-import com.erymanthian.dance.entities.auth.Dancer;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +19,7 @@ public class ConnectRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long targetDancer;
+    private Integer eventId;
 
     private Long sourceDancer;
 
@@ -30,8 +28,8 @@ public class ConnectRequest {
     @Transient
     private Boolean isForMe;
 
-    public ConnectRequest(Long targetDancer, Long sourceDancer, Short status) {
-        this.targetDancer = targetDancer;
+    public ConnectRequest(Integer eventId, Long sourceDancer, Short status) {
+        this.eventId = eventId;
         this.sourceDancer = sourceDancer;
         this.status = status;
     }
