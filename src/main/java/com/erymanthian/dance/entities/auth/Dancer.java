@@ -30,6 +30,9 @@ public class Dancer extends User {
     private EyeColor eyeColor;
     private Integer height;
 
+    private String instagram;
+    private String tiktok;
+
 
     @ElementCollection
     @CollectionTable(name = "dancer_styles", joinColumns = @JoinColumn(name = "dancer_id"))
