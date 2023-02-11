@@ -27,6 +27,7 @@ public class ConnectRequestService {
                 throw new ConnectionException();
             }
             return connectRequestRepository.save(new ConnectRequest(connectRequestCreateDTO.getEventId(), userId, (short) 0));
+
         } else throw new EventService.InvalidAuthenticationMethod();
     }
 

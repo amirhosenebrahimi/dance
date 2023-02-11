@@ -29,7 +29,7 @@ public class MessageService {
             if (connect.isEmpty()) {
                 throw new ConnectionException();
             }
-            return messageRepository.save(new Message(message.getMessage(), null, message.getConnectId(), System.currentTimeMillis()));
+            return messageRepository.save(new Message(message.getMessage(), null, message.getConnectId(), System.currentTimeMillis(), userId));
         } else throw new EventService.InvalidAuthenticationMethod();
     }
 
@@ -42,7 +42,7 @@ public class MessageService {
             }
             String uuid = UUID.randomUUID().toString();
             multipartFile.transferTo(path.resolve(uuid));
-            return messageRepository.save(new Message(null, uuid, connectionId, System.currentTimeMillis()));
+            return messageRepository.save(new Message(null, uuid, connectionId, System.currentTimeMillis(),userId));
         } else throw new EventService.InvalidAuthenticationMethod();
     }
 
@@ -59,6 +59,6 @@ public class MessageService {
     }
 
     @StandardException
-       public static class ConnectionException extends RuntimeException {
+    public static class ConnectionException extends RuntimeException {
     }
 }
