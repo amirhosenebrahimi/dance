@@ -195,6 +195,20 @@ public class RegistrationService {
         } else throw new JWTAuthenticationNeededException();
     }
 
+
+    public void socialMedia(Authentication authentication, SocialMedia dto) {
+        if (authentication instanceof JwtAuthenticationToken token) {
+            Dancer dancer = (Dancer) userRepository.findById(token.getToken().getClaim(TokenService.USER_ID)).orElseThrow();
+            Short step = dancer.getStep();
+            if (step == 6) {
+                dancer.setStep(++step);
+                dancer.setInstagram(dto.instagram());
+                dancer.setTiktok(dto.tiktok());
+                userRepository.save(dancer);
+            } else throw new WrongStepException();
+        } else throw new JWTAuthenticationNeededException();
+    }
+
     public String setImage(Authentication authentication, MultipartFile file) {
         if (authentication instanceof JwtAuthenticationToken token) {
             User user = userRepository.findById(token.getToken().getClaim(TokenService.USER_ID)).orElseThrow();
