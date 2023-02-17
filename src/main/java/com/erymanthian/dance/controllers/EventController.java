@@ -55,7 +55,7 @@ public class EventController {
         service.deleteImage(authentication, id, dto);
     }
 
-    @PostMapping("/apply")
+ /*   @PostMapping("/apply")
     public void apply(Authentication authentication, @RequestParam int id) {
         service.apply(authentication, id);
     }
@@ -63,6 +63,6 @@ public class EventController {
     @GetMapping("/apply")
     public IsAppliedDto isApplied(Authentication authentication, @RequestParam int id) {
         return new IsAppliedDto(service.isApplied(authentication, id));
-    }
+    }*/
 
 }

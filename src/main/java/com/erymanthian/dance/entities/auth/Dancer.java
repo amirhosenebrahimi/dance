@@ -33,7 +33,6 @@ public class Dancer extends User {
     private String instagram;
     private String tiktok;
 
-
     @ElementCollection
     @CollectionTable(name = "dancer_styles", joinColumns = @JoinColumn(name = "dancer_id"))
     @Column(name = "styles")

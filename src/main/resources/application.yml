@@ -6,12 +6,13 @@ spring:
         jwt:
           public-key-location: classpath:keys/public.pem
   datasource:
-    username: dance
-    password: PZNH7rF78wE
-    url: jdbc:mariadb://localhost/dance
+    username: root
+    password: mypass
+    url: jdbc:mariadb://localhost:3306/dance
+
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     open-in-view: on
     defer-datasource-initialization: on
   sql:
@@ -35,3 +36,5 @@ keys:
 logging:
   level:
     root: debug
+server:
+  port: 8085

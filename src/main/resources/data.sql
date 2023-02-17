@@ -1,10 +1,12 @@
 INSERT INTO user (role, email, step, password, phone_number, state, city)
-VALUES ('DANCER', 'sadeghabedi@live.com', 1, '$2a$04$9YSd2rMi85ZJNE7TU3PElu2f6WUDLZP9.zOs2qvAQlwwY4zsZxXe2',
+VALUES ('DANCER', 'sadeghabedi@live.com', 1, '$2a$10$qCV5QuOyVSqrrIzq5TVfu.v3ZWU/XR/FVl/KX226qCerRKXLsfbPC',
         '+989390261196', 'California', 'Los Angeles'),
-       ('DANCER', 'sadeghabedi36@gmail.com', 6, '$2a$04$9YSd2rMi85ZJNE7TU3PElu2f6WUDLZP9.zOs2qvAQlwwY4zsZxXe2',
+       ('DANCER', 'sadeghabedi36@gmail.com', 6, '$2a$10$qCV5QuOyVSqrrIzq5TVfu.v3ZWU/XR/FVl/KX226qCerRKXLsfbPC',
         '+989100501578', 'California', 'San Diego'),
        ('DANCER', 'zmmmken@gmail.com', 6, '$2y$10$VC6/PgzBiDmxfy5nE4csAOV.tXWA6lBeSH9vnyKqmtzWiz5J5048S',
-        '+989158146043', 'Texas', 'Dallas');
+        '+989158146043', 'Texas', 'Dallas'),
+       ('DANCER', 'test@live.com', 1, '$2a$10$25O5Fc.b4S4UZicKwRD8Tuw2cpC/P.Tll9gAHKCQzOrdN5XOnQR.e',
+        '+989390261196', 'California', 'Los Angeles');
 INSERT INTO event (name, step, state, city, company_id)
 VALUES ('An Event', 5, 'California', 'Los Angeles', 1),
        ('An Event Sample', 5, 'California', 'Los Angeles', 1),
