@@ -8,9 +8,11 @@ import com.erymanthian.dance.entities.auth.User;
 import com.erymanthian.dance.repositories.CodeRepository;
 import com.erymanthian.dance.repositories.UserRepository;
 import com.erymanthian.dance.security.SecurityUser;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.StandardException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -39,23 +41,52 @@ public class RegistrationService {
     private final TokenService tokenService;
     private final PasswordEncoder encoder;
     private final EmailService emailService;
+    private final SmsService smsService;
     private final RandomGenerator generator = RandomGenerator.getDefault();
     private final Path path;
+    private final PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
 
-    public UserAndToken login(Authentication authentication) {
+
+    public UserAndToken loginEmail(Authentication authentication) {
         if (authentication.getPrincipal() instanceof SecurityUser user) {
             User entity = userRepository.findByEmail(user.getUsername()).orElseThrow();
             return new UserAndToken(entity, tokenService.generateLoginToken(user));
         } else throw new NotLoggedInWithBasicAuthException();
     }
 
-    public String register(String email, String password) {
-        User user = createUser(email, password);
-        sendVerificationCode(email, user.getId());
+    public void loginPhoneSend() {
+
+    }
+
+    public String loginPhoneVerify() {
+        return null;
+    }
+
+    public String registerEmail(String email, String password) {
+        User user = createUserEmail(email, password);
+        sendVerificationEmail(email, user.getId());
         return tokenService.generateRegisterToken(user);
     }
 
-    private Dancer createUser(String email, String password) {
+    public String registerPhone(String phoneNumber, String countryCode) {
+        String phone = getPhoneNumber(phoneNumber, countryCode);
+
+        User user = createUserPhone(phone);
+        sendVerificationPhoneNumber(phone, user.getId());
+        return tokenService.generateRegisterToken(user);
+    }
+
+    private String getPhoneNumber(String phoneNumber, String countryCode) {
+        try {
+            var phone = phoneUtil.parse(phoneNumber, countryCode == null ? "US" : countryCode);
+            if (!phoneUtil.isValidNumber(phone)) throw new PhoneNumberParsingException();
+            return phone.getRawInput();
+        } catch (Exception e) {
+            throw new PhoneNumberParsingException();
+        }
+    }
+
+    private Dancer createUserEmail(String email, String password) {
         String encodedPassword = encoder.encode(password);
         Dancer entity = new Dancer(email, encodedPassword);
         userRepository.findByEmail(email).ifPresent(user -> {
@@ -66,19 +97,38 @@ public class RegistrationService {
         return entity;
     }
 
-    private void sendVerificationCode(String email, Long id) {
-        if (codeRepository.existsById(id)) codeRepository.deleteById(id);
+    private Dancer createUserPhone(String phoneNumber) {
+        Dancer entity = new Dancer(phoneNumber);
+        userRepository.findByPhoneNumber(phoneNumber).ifPresent(user -> {
+            if (user.getStep() > 0) throw new UserAlreadyExistsException();
+            else userRepository.delete(user);
+        });
+        entity = userRepository.save(entity);
+        return entity;
+    }
 
+    private void sendVerificationEmail(String email, Long id) {
+        int verificationCode = getVerificationCode(id);
+        emailService.sendMessage(email, String.valueOf(verificationCode));
+    }
+
+    private void sendVerificationPhoneNumber(String phoneNumber, Long id) {
+        int verificationCode = getVerificationCode(id);
+        smsService.sendMessage(phoneNumber, String.valueOf(verificationCode));
+    }
+
+    private int getVerificationCode(Long id) {
+        if (codeRepository.existsById(id)) codeRepository.deleteById(id);
         int verificationCode = generator.nextInt(1000, 9999);
         Code code = new Code(id, String.valueOf(verificationCode), LocalDateTime.now().plus(Duration.ofMinutes(10)), Code.Type.EMAIL);
         codeRepository.save(code);
-        emailService.sendMessage(email, String.valueOf(verificationCode));
+        return verificationCode;
     }
 
     public void resend(Authentication authentication) {
         if (authentication instanceof JwtAuthenticationToken token) {
             User user = userRepository.findById(token.getToken().getClaim(TokenService.USER_ID)).orElseThrow();
-            sendVerificationCode(user.getEmail(), user.getId());
+            sendVerificationEmail(user.getEmail(), user.getId());
         }
     }
 
@@ -314,13 +364,13 @@ public class RegistrationService {
 
     public void changeEmail(Authentication authentication, EmailDto dto) {
         if (authentication instanceof JwtAuthenticationToken token) {
-            sendVerificationCode(dto.newEmail(), token.getToken().getClaim(TokenService.USER_ID));
+            sendVerificationEmail(dto.newEmail(), token.getToken().getClaim(TokenService.USER_ID));
         } else throw new JWTAuthenticationNeededException();
     }
 
     public void changeResendEmail(Authentication authentication, EmailDto dto) {
         if (authentication instanceof JwtAuthenticationToken token) {
-            sendVerificationCode(dto.newEmail(), token.getToken().getClaim(TokenService.USER_ID));
+            sendVerificationEmail(dto.newEmail(), token.getToken().getClaim(TokenService.USER_ID));
         } else throw new JWTAuthenticationNeededException();
     }
 
@@ -360,5 +410,7 @@ public class RegistrationService {
     public static class WrongCodeException extends RuntimeException {
     }
 
-
+    @StandardException
+    public static class PhoneNumberParsingException extends RuntimeException {
+    }
 }

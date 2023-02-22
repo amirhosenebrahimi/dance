@@ -28,6 +28,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.data:spring-data-rest-hal-explorer'
     compileOnly 'org.projectlombok:lombok'
+//    runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
@@ -35,9 +36,11 @@ dependencies {
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
-    implementation 'com.azure:azure-communication-common:1.2.3'
-    implementation 'com.azure:azure-communication-phonenumbers:1.0.17'
-    implementation 'com.azure:azure-identity:1.7.2'
+//    implementation 'com.azure:azure-communication-common:1.2.3'
+    implementation 'com.azure:azure-communication-sms:1.1.8'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.13.6'
+//    implementation 'com.azure:azure-communication-phonenumbers:1.0.17'
+//    implementation 'com.azure:azure-identity:1.7.2'
 }
 
 tasks.named('test') {

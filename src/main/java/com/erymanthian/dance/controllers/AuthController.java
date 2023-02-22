@@ -1,5 +1,6 @@
 package com.erymanthian.dance.controllers;
 
+import com.erymanthian.dance.dtos.auth.LoginPhoneSendDto;
 import com.erymanthian.dance.dtos.auth.*;
 import com.erymanthian.dance.services.RegistrationService;
 import jakarta.validation.Valid;
@@ -12,17 +13,31 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-
     private final RegistrationService service;
 
-    @GetMapping("/login")
-    public UserAndToken login(Authentication authentication) {
-        return service.login(authentication);
+    @GetMapping("/login/email")
+    public UserAndToken loginEmail(Authentication authentication) {
+        return service.loginEmail(authentication);
     }
 
-    @PostMapping("/register")
-    public TokenDto register(@RequestBody @Valid RegisterInDto dto) {
-        return new TokenDto(service.register(dto.email(), dto.password()));
+    @PostMapping("/login/phone/send")
+    public void loginPhoneSend(@RequestBody LoginPhoneSendDto dto) {
+        service.loginPhoneSend();
+    }
+
+    @PostMapping("/login/phone/verify")
+    public TokenDto loginPhoneVerify(@RequestBody LoginPhoneSendDto dto) {
+        return new TokenDto(service.loginPhoneVerify());
+    }
+
+    @PostMapping("/register/email")
+    public TokenDto registerEmail(@RequestBody @Valid RegisterEmailInDto dto) {
+        return new TokenDto(service.registerEmail(dto.email(), dto.password()));
+    }
+
+    @PostMapping("/register/phone")
+    public TokenDto registerPhone(@RequestBody @Valid RegisterPhoneInDto dto) {
+        return new TokenDto(service.registerPhone(dto.phoneNumber(), dto.countryCode()));
     }
 
     @PostMapping("/verify")

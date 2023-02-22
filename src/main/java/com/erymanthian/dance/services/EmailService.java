@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 public class EmailService {
     private final MailSender mailSender;
 
-    public void sendMessage(String to, String code) {
+    public void sendMessage(String email, String code) {
         var message = new SimpleMailMessage();
-        message.setTo(to);
+        message.setTo(email);
         message.setText("You're Code: %s".formatted(code));
         message.setSubject("Verify Email Address");
         mailSender.send(message);

@@ -58,6 +58,11 @@ public class Dancer extends User {
         this.setRole("DANCER");
     }
 
+    public Dancer(String phoneNumber) {
+        super(phoneNumber);
+        this.setRole("DANCER");
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -19,7 +19,9 @@ public class ErrorHandler {
             RegistrationService.JWTAuthenticationNeededException.class,
             RegistrationService.WrongCodeException.class,
             RegistrationService.WrongStepException.class,
-            RegistrationService.NotLoggedInWithBasicAuthException.class})
+            RegistrationService.NotLoggedInWithBasicAuthException.class,
+            RegistrationService.PhoneNumberParsingException.class
+    })
     public ProblemDetail registrationErrorHandler(Exception e) {
         log.info(Arrays.toString(e.getStackTrace()));
         log.warning(e.getMessage());

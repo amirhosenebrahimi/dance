@@ -52,6 +52,11 @@ public abstract class User {
         step = 0;
     }
 
+    protected User(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+        step = 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
