@@ -35,7 +35,7 @@ public class ConnectionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(connectRequestService.create(authentication, connectRequestCreateDTO));
     }
 
-    @GetMapping("/my-request/")
+    @GetMapping("/my-request")
     public ResponseEntity<List<ConnectRequest>> findMyRequest( Authentication authentication) {
         return ResponseEntity.ok(connectRequestService.findMyRequest(authentication));
     }
