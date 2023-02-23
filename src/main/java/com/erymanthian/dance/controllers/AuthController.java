@@ -65,6 +65,11 @@ public class AuthController {
         service.bio(authentication, bio);
     }
 
+    @PostMapping("/social-media/dancer/")
+    public void socialMedia(Authentication authentication, @RequestBody SocialMedia socialMedia) {
+        service.socialMedia(authentication, socialMedia);
+    }
+
     @PostMapping("/image")
     public IdDto setImage(Authentication authentication, @RequestPart() MultipartFile file) {
         return new IdDto(service.setImage(authentication, file));

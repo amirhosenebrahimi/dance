@@ -33,8 +33,9 @@ public abstract class User {
      *  4   APPEARANCE              BIO
      *  5   TALENT                  IMAGE BANNER ACCEPT
      *  6   BIO                     PAYMENT
-     *  7   IMAGE GALLERY ACCEPT
-     *  8   PAYMENT
+     *  7   SOCIAL-MEDIA
+     *  8   IMAGE GALLERY ACCEPT
+     *  9   PAYMENT
      */
     private Short step;
 

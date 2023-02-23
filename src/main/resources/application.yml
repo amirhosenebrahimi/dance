@@ -28,6 +28,8 @@ spring:
           auth: true
           starttls:
             enable: true
+  profiles:
+    active: prod
 keys:
   pri: classpath:keys/private.pem
   pub: classpath:keys/public.pem
