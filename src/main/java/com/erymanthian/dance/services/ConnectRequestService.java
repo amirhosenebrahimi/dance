@@ -5,10 +5,15 @@ import com.erymanthian.dance.entities.ConnectRequest;
 import com.erymanthian.dance.repositories.ConnectRequestRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.StandardException;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +23,9 @@ public class ConnectRequestService {
 
     private final ConnectRequestRepository connectRequestRepository;
     private final EventService eventService;
+    private final ProfileService profileService;
+    private final Path path;
+
 
     public ConnectRequest create(Authentication authentication, ConnectRequestCreateDTO connectRequestCreateDTO) throws Exception {
         if (authentication instanceof JwtAuthenticationToken token) {
@@ -31,14 +39,29 @@ public class ConnectRequestService {
         } else throw new EventService.InvalidAuthenticationMethod();
     }
 
-    public List<ConnectRequest> findMyRequest(Integer eventId, Authentication authentication) {
+    public List<ConnectRequest> findMyRequest(Authentication authentication) {
         if (authentication instanceof JwtAuthenticationToken token) {
             Long userId = (Long) token.getTokenAttributes().get(TokenService.USER_ID);
-            var event = eventService.findById(eventId, userId);
-            if (event.isEmpty()) {
-                throw new ConnectionException();
+            var user = profileService.find(userId);
+            if (user.getRole().equals("DANCER")) {
+                return connectRequestRepository.findBySourceDancer(userId);
+            } else if (user.getRole().equals("COMPANY")) {
+                System.out.println( connectRequestRepository.findByCompany(userId));
+                return connectRequestRepository.findByCompany(userId).stream()
+                        .peek(connectRequest -> {
+                            if (connectRequest.getImage() != null) {
+                                try {
+                                    connectRequest.setResource(Base64.getEncoder().encodeToString((Files.readAllBytes(path.resolve(connectRequest.getImage())))));
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        })
+                        .toList();
             }
-            return connectRequestRepository.findByEventId(eventId);
+            throw new ConnectionException();
+
         } else throw new EventService.InvalidAuthenticationMethod();
     }
 

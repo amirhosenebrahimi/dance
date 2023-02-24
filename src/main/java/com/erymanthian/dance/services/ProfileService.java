@@ -26,7 +26,8 @@ public class ProfileService {
             if (user instanceof Dancer dancer)
                 return dancer;
             else throw new WrongTypeException();
-        } throw new RegistrationService.JWTAuthenticationNeededException();
+        }
+        throw new RegistrationService.JWTAuthenticationNeededException();
     }
 
     public Company company(Authentication authentication, Long id) {
@@ -38,7 +39,12 @@ public class ProfileService {
             if (user instanceof Company company)
                 return company;
             else throw new WrongTypeException();
-        } throw new RegistrationService.JWTAuthenticationNeededException();
+        }
+        throw new RegistrationService.JWTAuthenticationNeededException();
+    }
+
+    public User find(Long id) {
+        return userRepository.findById(id).get();
     }
 
     @StandardException
@@ -48,4 +54,6 @@ public class ProfileService {
     @StandardException
     public static class WrongTypeException extends RuntimeException {
     }
+
+
 }
