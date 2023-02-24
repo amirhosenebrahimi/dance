@@ -20,6 +20,7 @@ public class MessageService {
 
     private final MessageRepository messageRepository;
     private final ConnectRequestService connectRequestService;
+    private final EventService eventService;
     private final Path path;
 
     public Message create(Authentication authentication, MessageCreateDTO message) throws Exception {
@@ -38,11 +39,16 @@ public class MessageService {
             Long userId = (Long) token.getTokenAttributes().get(TokenService.USER_ID);
             var connect = connectRequestService.findApprovedConnection(userId, connectionId);
             if (connect.isEmpty()) {
-                throw new ConnectionException();
+                connect = connectRequestService.findById(connectionId);
+                if (connect.isEmpty())
+                    throw new ConnectionException();
+                if(eventService.findById(connect.get().getEventId(), userId).isEmpty()){
+                    throw new ConnectionException();
+                }
             }
             String uuid = UUID.randomUUID().toString();
             multipartFile.transferTo(path.resolve(uuid));
-            return messageRepository.save(new Message(null, uuid, connectionId, System.currentTimeMillis(),userId));
+            return messageRepository.save(new Message(null, uuid, connectionId, System.currentTimeMillis(), userId));
         } else throw new EventService.InvalidAuthenticationMethod();
     }
 
@@ -52,8 +58,15 @@ public class MessageService {
             Long userId = (Long) token.getTokenAttributes().get(TokenService.USER_ID);
             var connect = connectRequestService.findApprovedConnection(userId, connectionId);
             if (connect.isEmpty()) {
-                throw new ConnectionException();
+                connect = connectRequestService.findById(connectionId);
+                if (connect.isEmpty())
+                    throw new ConnectionException();
+                if(eventService.findById(connect.get().getEventId(), userId).isEmpty()){
+                    throw new ConnectionException();
+                }
             }
+
+
             return messageRepository.findByConnectionId(connectionId);
         } else throw new EventService.InvalidAuthenticationMethod();
     }

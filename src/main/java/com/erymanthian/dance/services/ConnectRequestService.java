@@ -92,6 +92,10 @@ public class ConnectRequestService {
                         connectRequest.getSourceDancer().equals(userId));
     }
 
+    public Optional<ConnectRequest> findById(Long connectionId) {
+        return connectRequestRepository.findById(connectionId);
+    }
+
     @StandardException
     public static class ConnectionException extends RuntimeException {
 
