@@ -28,7 +28,12 @@ public class MessageService {
             Long userId = (Long) token.getTokenAttributes().get(TokenService.USER_ID);
             var connect = connectRequestService.findApprovedConnection(userId, message.getConnectId());
             if (connect.isEmpty()) {
-                throw new ConnectionException();
+                connect = connectRequestService.findById(message.getConnectId());
+                if (connect.isEmpty())
+                    throw new ConnectionException();
+                if(eventService.findById(connect.get().getEventId(), userId).isEmpty()){
+                    throw new ConnectionException();
+                }
             }
             return messageRepository.save(new Message(message.getMessage(), null, message.getConnectId(), System.currentTimeMillis(), userId));
         } else throw new EventService.InvalidAuthenticationMethod();
