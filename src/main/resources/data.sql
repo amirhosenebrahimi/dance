@@ -1,5 +1,5 @@
 INSERT INTO user (role, email, step, password, phone_number, state, city)
-VALUES ('DANCER', 'sadeghabedi@live.com', 1, '$2a$10$qCV5QuOyVSqrrIzq5TVfu.v3ZWU/XR/FVl/KX226qCerRKXLsfbPC',
+VALUES ('COMPANY', 'sadeghabedi@live.com', 1, '$2a$10$qCV5QuOyVSqrrIzq5TVfu.v3ZWU/XR/FVl/KX226qCerRKXLsfbPC',
         '+989390261196', 'California', 'Los Angeles'),
        ('DANCER', 'sadeghabedi36@gmail.com', 6, '$2a$10$qCV5QuOyVSqrrIzq5TVfu.v3ZWU/XR/FVl/KX226qCerRKXLsfbPC',
         '+989100501578', 'California', 'San Diego'),

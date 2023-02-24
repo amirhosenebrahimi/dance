@@ -25,7 +25,7 @@ public class Company extends User {
     private String banner;
     private String street;
     private String street2;
-    private int zip;
+    private Integer zip;
 
 
     @ToString.Exclude
