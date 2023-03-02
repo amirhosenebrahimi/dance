@@ -262,17 +262,15 @@ public class RegistrationService {
     public String setImage(Authentication authentication, MultipartFile file) {
         if (authentication instanceof JwtAuthenticationToken token) {
             User user = userRepository.findById(token.getToken().getClaim(TokenService.USER_ID)).orElseThrow();
-            if (user instanceof Dancer dancer && dancer.getStep() == 6 || user instanceof Company company && company.getStep() == 4) {
-                String id = UUID.randomUUID().toString();
-                try {
-                    file.transferTo(path.resolve(id));
-                    user.setImage(id);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                userRepository.save(user);
-                return id;
-            } else throw new WrongStepException();
+            String id = UUID.randomUUID().toString();
+            try {
+                file.transferTo(path.resolve(id));
+                user.setImage(id);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            userRepository.save(user);
+            return id;
         } else throw new JWTAuthenticationNeededException();
     }
 
@@ -354,7 +352,7 @@ public class RegistrationService {
     public void accept(Authentication authentication) {
         if (authentication instanceof JwtAuthenticationToken token) {
             User user = userRepository.findById(token.getToken().getClaim(TokenService.USER_ID)).orElseThrow();
-            if (user instanceof Dancer dancer && dancer.getStep() == 6 || user instanceof Company company && company.getStep() == 4) {
+            if (user instanceof Dancer dancer && dancer.getStep() == 7 || user instanceof Company company && company.getStep() == 4) {
                 user.setStep((short) (user.getStep() + 1));
                 userRepository.save(user);
             } else throw new WrongStepException();
