@@ -80,7 +80,7 @@ public class AuthController {
         service.bio(authentication, bio);
     }
 
-    @PostMapping("/social-media/dancer/")
+    @PostMapping("/social-media/dancer")
     public void socialMedia(Authentication authentication, @RequestBody SocialMedia socialMedia) {
         service.socialMedia(authentication, socialMedia);
     }
