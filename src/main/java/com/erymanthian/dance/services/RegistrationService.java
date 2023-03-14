@@ -12,7 +12,6 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.StandardException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -296,7 +295,7 @@ public class RegistrationService {
                 String id = UUID.randomUUID().toString();
                 try {
                     file.transferTo(path.resolve(id));
-                    company.setImage(id);
+                    company.setBanner(id);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -312,7 +311,7 @@ public class RegistrationService {
             String id = company.getImage();
             try {
                 Files.delete(path.resolve(id));
-                company.setImage(null);
+                company.setBanner(null);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
