@@ -120,6 +120,11 @@ public class AuthController {
         service.accept(authentication);
     }
 
+    @PostMapping("/payment")
+    public void payment(Authentication authentication) {
+        service.payment(authentication);
+    }
+
     @PatchMapping("/email")
     public void changeEmail(Authentication authentication, @RequestBody EmailDto dto) {
         service.changeEmail(authentication, dto);

@@ -30,9 +30,14 @@ spring:
             enable: true
   profiles:
     active: prod
+  mvc:
+    problemdetails:
+      enabled: true
 keys:
   pri: classpath:keys/private.pem
   pub: classpath:keys/public.pem
 logging:
   level:
     root: debug
+  file:
+    path: ${HOME}

@@ -359,6 +359,19 @@ public class RegistrationService {
 
     }
 
+    public void payment(Authentication authentication) {
+        if (authentication instanceof JwtAuthenticationToken token) {
+            User user = userRepository.findById(token.getToken().getClaim(TokenService.USER_ID)).orElseThrow();
+            if (
+                    user instanceof Dancer dancer && dancer.getStep() == 8 ||
+                    user instanceof Company company && company.getStep() == 5) {
+                user.setStep((short) (user.getStep() + 1));
+                userRepository.save(user);
+            } else throw new WrongStepException();
+        } else throw new JWTAuthenticationNeededException();
+
+    }
+
     public void changeEmail(Authentication authentication, EmailDto dto) {
         if (authentication instanceof JwtAuthenticationToken token) {
             sendVerificationEmail(dto.newEmail(), token.getToken().getClaim(TokenService.USER_ID));
