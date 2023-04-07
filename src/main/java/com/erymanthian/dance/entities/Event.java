@@ -26,6 +26,10 @@ public class Event {
     private String name;
     private String state;
     private String city;
+    private String street;
+    private String street2;
+    private Integer zip;
+
     /**
      * EVENT
      * 0   NAME
@@ -64,6 +68,17 @@ public class Event {
         this.state = state;
         this.city = city;
         step = 0;
+    }
+
+    public Event(Long companyId, String name, String state, String city, String street, String street2, Integer zip) {
+        this.companyId = companyId;
+        this.name = name;
+        this.state = state;
+        this.city = city;
+        this.street = street;
+        this.street2 = street2;
+        this.zip = zip;
+        this.step = 0;
     }
 
     @Override

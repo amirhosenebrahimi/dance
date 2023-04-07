@@ -6,7 +6,6 @@ import com.erymanthian.dance.dtos.OpportunityTypeDto;
 import com.erymanthian.dance.dtos.StylesAndPriceDto;
 import com.erymanthian.dance.dtos.auth.IdDto;
 import com.erymanthian.dance.entities.Event;
-import com.erymanthian.dance.entities.auth.Dancer;
 import com.erymanthian.dance.repositories.EventRepository;
 import com.erymanthian.dance.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +35,7 @@ public class EventService {
     public Integer create(Authentication authentication, EventNameDto dto) {
         if (authentication instanceof JwtAuthenticationToken token) {
             Long userId = (Long) token.getTokenAttributes().get(TokenService.USER_ID);
-            Event event = new Event(userId, dto.name(), dto.state(), dto.city());
+            Event event = new Event(userId, dto.name(), dto.state(), dto.city(), dto.street(), dto.street2(), dto.zip());
             event = repository.save(event);
             return event.getId();
         }
