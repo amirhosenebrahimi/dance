@@ -1,5 +1,9 @@
 # TODO: create DEV profile with h2 configured but set production config as a default
 spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
   security:
     oauth2:
       resourceserver:
