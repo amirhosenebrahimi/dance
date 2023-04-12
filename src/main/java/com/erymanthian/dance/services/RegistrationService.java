@@ -223,7 +223,7 @@ public class RegistrationService {
             if (step == 4) {
                 dancer.setStep(++step);
                 dancer.setStyles(new HashSet<>(dto.danceStyles()));
-                dancer.setOpportunityType(dto.opportunityType());
+                dancer.setOpportunities(new HashSet<>(dto.opportunities()));
                 dancer.setRepresented(dto.represented());
                 dancer.setAffiliation(dto.affiliation());
                 dancer.setExpertise(dto.expertise());
@@ -364,7 +364,7 @@ public class RegistrationService {
             User user = userRepository.findById(token.getToken().getClaim(TokenService.USER_ID)).orElseThrow();
             if (
                     user instanceof Dancer dancer && dancer.getStep() == 8 ||
-                    user instanceof Company company && company.getStep() == 5) {
+                            user instanceof Company company && company.getStep() == 5) {
                 user.setStep((short) (user.getStep() + 1));
                 userRepository.save(user);
             } else throw new WrongStepException();
