@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class EmailService {
+public class EmailService implements CommunicationService {
     private final MailSender mailSender;
 
     public void sendMessage(String email, String code) {

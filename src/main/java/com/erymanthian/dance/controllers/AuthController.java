@@ -21,13 +21,13 @@ public class AuthController {
     }
 
     @PostMapping("/login/phone/send")
-    public void loginPhoneSend(@RequestBody LoginPhoneSendDto dto) {
-        service.loginPhoneSend();
+    public TokenDto loginPhoneSend(@RequestBody LoginPhoneSendDto dto) {
+        return new TokenDto(service.loginPhoneSend(dto));
     }
 
     @PostMapping("/login/phone/verify")
-    public TokenDto loginPhoneVerify(@RequestBody LoginPhoneSendDto dto) {
-        return new TokenDto(service.loginPhoneVerify());
+    public UserAndToken loginPhoneVerify(Authentication authentication, @RequestBody VerifyInRequest dto) {
+        return service.loginPhoneVerify(authentication, dto);
     }
 
     @PostMapping("/register/email")
@@ -40,9 +40,14 @@ public class AuthController {
         return new TokenDto(service.registerPhone(dto.phoneNumber(), dto.countryCode()));
     }
 
-    @PostMapping("/verify")
-    public TokenDto verify(Authentication authentication, @RequestBody VerifyInRequest dto) {
-        return new TokenDto(service.verify(authentication, dto.code()));
+    @PostMapping("/verify/email")
+    public TokenDto verifyEmail(Authentication authentication, @RequestBody VerifyInRequest dto) {
+        return new TokenDto(service.verifyEmail(authentication, dto.code()));
+    }
+
+    @PostMapping("/verify/phone")
+    public TokenDto verifyPhone(Authentication authentication, @RequestBody VerifyInRequest dto) {
+        return new TokenDto(service.verifyPhone(authentication, dto.code()));
     }
 
     @GetMapping("/resend")

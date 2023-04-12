@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -53,12 +54,20 @@ public class RegistrationService {
         } else throw new NotLoggedInWithBasicAuthException();
     }
 
-    public void loginPhoneSend() {
+    public String loginPhoneSend(LoginPhoneSendDto dto) {
+        String phone = getPhoneNumber(dto.phoneNumber(), dto.countryCode());
 
+        var user = userRepository.findByPhoneNumber(phone).orElseThrow();
+        sendVerificationPhoneNumber(phone, user.getId());
+        return tokenService.generateRegisterToken(user);
     }
 
-    public String loginPhoneVerify() {
-        return null;
+    public UserAndToken loginPhoneVerify(Authentication authentication, VerifyInRequest dto) {
+        if (authentication instanceof JwtAuthenticationToken token) {
+            verifyPhoneNumber(dto.code(), token.getToken().getClaim(TokenService.USER_ID));
+            var user = userRepository.findById(token.getToken().getClaim(TokenService.USER_ID)).orElseThrow();
+            return new UserAndToken(user, tokenService.generateLoginToken(new SecurityUser(user)));
+        } else throw new JWTAuthenticationNeededException();
     }
 
     public String registerEmail(String email, String password) {
@@ -79,7 +88,7 @@ public class RegistrationService {
         try {
             var phone = phoneUtil.parse(phoneNumber, countryCode == null ? "US" : countryCode);
             if (!phoneUtil.isValidNumber(phone)) throw new PhoneNumberParsingException();
-            return phone.getRawInput();
+            return phoneUtil.format(phone, PhoneNumberUtil.PhoneNumberFormat.E164);
         } catch (Exception e) {
             throw new PhoneNumberParsingException();
         }
@@ -131,9 +140,23 @@ public class RegistrationService {
         }
     }
 
-    public String verify(Authentication authentication, String code) {
+    public String verifyEmail(Authentication authentication, String code) {
         if (authentication instanceof JwtAuthenticationToken token) {
             User user = verifyEmail(code, token);
+            Short step = user.getStep();
+            if (step == 0) {
+                user.setStep(++step);
+                userRepository.save(user);
+                //TODO: most of save calls are redundant due to the @Transactional
+            } else throw new WrongStepException();
+            return tokenService.generateVerifyToken(user);
+        } else throw new JWTAuthenticationNeededException();
+    }
+
+    public String verifyPhone(Authentication authentication, String code) {
+        if (authentication instanceof JwtAuthenticationToken token) {
+            verifyPhoneNumber(code, token.getToken().getClaim(TokenService.USER_ID));
+            var user = userRepository.findById(token.getToken().getClaim(TokenService.USER_ID)).orElseThrow();
             Short step = user.getStep();
             if (step == 0) {
                 user.setStep(++step);
@@ -149,6 +172,12 @@ public class RegistrationService {
         savedCode.filter(code1 -> code1.getExpireAt().isAfter(LocalDateTime.now())).map(Code::getVerification)
                 .filter(s -> s.equals(code)).orElseThrow(WrongCodeException::new);
         return userRepository.findById(token.getToken().getClaim(TokenService.USER_ID)).orElseThrow();
+    }
+
+    private void verifyPhoneNumber(String code, Long userId) {
+        Optional<Code> savedCode = codeRepository.findById(userId);
+        savedCode.filter(code1 -> code1.getExpireAt().isAfter(LocalDateTime.now())).map(Code::getVerification)
+                .filter(s -> s.equals(code)).orElseThrow(WrongCodeException::new);
     }
 
     public String field(Authentication authentication, FieldOrActivityInDto dto) {
@@ -223,7 +252,7 @@ public class RegistrationService {
             if (step == 4) {
                 dancer.setStep(++step);
                 dancer.setStyles(new HashSet<>(dto.danceStyles()));
-                dancer.setOpportunities(new HashSet<>(dto.opportunities()));
+                dancer.setOpportunityType(dto.opportunityType());
                 dancer.setRepresented(dto.represented());
                 dancer.setAffiliation(dto.affiliation());
                 dancer.setExpertise(dto.expertise());

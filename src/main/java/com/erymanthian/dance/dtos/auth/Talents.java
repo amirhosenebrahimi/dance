@@ -7,6 +7,6 @@ import com.erymanthian.dance.enums.OpportunityType;
 
 import java.util.List;
 
-public record Talents(List<DanceStyle> danceStyles, List<OpportunityType> opportunities, String represented,
+public record Talents(List<DanceStyle> danceStyles, OpportunityType opportunityType, String represented,
                       Affiliation affiliation, String ethnicity, Expertise expertise) {
 }

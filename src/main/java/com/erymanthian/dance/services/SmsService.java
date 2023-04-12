@@ -23,5 +23,7 @@ public class SmsService implements CommunicationService {
     @Override
     public void sendMessage(String phoneNumber, String code) {
         SmsSendResult result = smsClient.send(AZURE_PHONE_NUMBER, phoneNumber, "Your Dancer Society Verification Code is: " + code);
+        if (!result.isSuccessful())
+            throw new RuntimeException(result.getErrorMessage());
     }
 }

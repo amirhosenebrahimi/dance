@@ -27,7 +27,7 @@ public class CommentService {
         if (authentication instanceof JwtAuthenticationToken token) {
             Long userId = (Long) token.getTokenAttributes().get(TokenService.USER_ID);
             Company company = (Company) repository.findById(companyId).orElseThrow();
-            Comment comment = new Comment(commentDto.rate(), commentDto.text(), (long) LocalDateTime.now().getSecond(),userId);
+            Comment comment = new Comment(commentDto.rate(), commentDto.text(), System.currentTimeMillis(), userId);
             company.getComments().add(comment);
         } else throw new EventService.InvalidAuthenticationMethod();
     }

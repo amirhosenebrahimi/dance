@@ -38,10 +38,7 @@ public class Dancer extends User {
     @Column(name = "styles")
     private Set<DanceStyle> styles = new HashSet<>();
 
-    @ElementCollection
-    @CollectionTable(name = "dancer_opportunities", joinColumns = @JoinColumn(name = "dancer_id"))
-    @Column(name = "opportunities")
-    private Set<OpportunityType> opportunities;
+    private OpportunityType opportunityType;
 
     private String represented;
 
