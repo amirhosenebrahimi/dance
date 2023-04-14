@@ -42,6 +42,7 @@ public class Event {
 
     private int step;
     private String description;
+    private Long holdDate;
     @ElementCollection
     @CollectionTable(name = "event_styles", joinColumns = @JoinColumn(name = "event_id"))
     @Column(name = "styles")

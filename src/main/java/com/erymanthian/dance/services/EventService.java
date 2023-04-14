@@ -53,6 +53,7 @@ public class EventService {
             Event event = repository.findById(id).orElseThrow();
             if (!Objects.equals(event.getCompanyId(), userId)) throw new AccessDenied();
             event.setDescription(dto.description());
+            event.setHoldDate(dto.holdDate());
             event.setStep(1);
             repository.save(event);
         } else throw new InvalidAuthenticationMethod();
