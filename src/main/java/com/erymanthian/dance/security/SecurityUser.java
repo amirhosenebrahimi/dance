@@ -28,7 +28,7 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(user::getRole);
+        return List.of(user::getRole, () -> "ROLE_".concat(user.getRole()));
     }
 
     @Override

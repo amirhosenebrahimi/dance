@@ -31,10 +31,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/register/**").permitAll()
-                        .requestMatchers("/auth/login/phone/**").permitAll()
-                        .anyRequest().permitAll()
+                                .requestMatchers("/auth/register/**").permitAll()
+                                .requestMatchers("/auth/login/phone/**").permitAll()
+                                .requestMatchers("/explorer/**").hasRole("ADMIN")
+                                .anyRequest().authenticated()
                 )
+
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(withDefaults())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);

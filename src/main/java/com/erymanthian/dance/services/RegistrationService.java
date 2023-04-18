@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -57,7 +56,7 @@ public class RegistrationService {
     public String loginPhoneSend(LoginPhoneSendDto dto) {
         String phone = getPhoneNumber(dto.phoneNumber(), dto.countryCode());
 
-        var user = userRepository.findByPhoneNumber(phone).orElseThrow();
+        var user = userRepository.findByPhoneNumber(phone).orElseThrow(UserNotExistsException::new);
         sendVerificationPhoneNumber(phone, user.getId());
         return tokenService.generateRegisterToken(user);
     }
@@ -427,6 +426,10 @@ public class RegistrationService {
             String encoded = encoder.encode(dto.password());
             user.setPassword(encoded);
         } else throw new JWTAuthenticationNeededException();
+    }
+
+    @StandardException
+    public static class UserNotExistsException extends RuntimeException {
     }
 
     @StandardException
