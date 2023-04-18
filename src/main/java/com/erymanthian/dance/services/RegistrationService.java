@@ -336,7 +336,7 @@ public class RegistrationService {
     public void deleteBannerCompany(Authentication authentication) {
         if (authentication instanceof JwtAuthenticationToken token) {
             Company company = (Company) userRepository.findById(token.getToken().getClaim(TokenService.USER_ID)).orElseThrow();
-            String id = company.getImage();
+            String id = company.getBanner();
             try {
                 Files.delete(path.resolve(id));
                 company.setBanner(null);
