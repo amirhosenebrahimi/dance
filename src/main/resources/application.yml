@@ -16,12 +16,12 @@ spring:
     url: jdbc:mariadb://127.0.0.1:3306/dance
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     open-in-view: on
     defer-datasource-initialization: on
-  sql:
-    init:
-      mode: always
+#  sql:
+#    init:
+#      mode: always
   mail:
     username: gilliamaa@gmail.com
     password: igmlpcaatkqfbsze
