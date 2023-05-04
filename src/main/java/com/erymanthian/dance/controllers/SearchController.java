@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -30,7 +31,9 @@ public class SearchController {
                                    @RequestParam(required = false) PayGrade endPayGrade,
                                    @RequestParam(required = false) DanceStyle style,
                                    @RequestParam boolean nearby) {
-        return service.searchEvent(authentication, query, page, size, myEvents, startPayGrade, endPayGrade, style, nearby);
+        //FIXME: I'm so sorry
+        return service.searchEvent(authentication, query, page, size, myEvents, startPayGrade, endPayGrade, style, nearby)
+                .stream().sorted(Comparator.comparing(Event::getHoldDate)).toList();
     }
 
     @GetMapping("/talent")

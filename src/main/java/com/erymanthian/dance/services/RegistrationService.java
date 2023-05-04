@@ -430,29 +430,57 @@ public class RegistrationService {
 
     @StandardException
     public static class UserNotExistsException extends RuntimeException {
+        @Override
+        public String getMessage() {
+            return "User is not exists";
+        }
     }
 
     @StandardException
     public static class UserAlreadyExistsException extends RuntimeException {
+        @Override
+        public String getMessage() {
+            return "User already exists";
+        }
     }
 
     @StandardException
     public static class WrongStepException extends RuntimeException {
+        @Override
+        public String getMessage() {
+            return "User are in a wrong step";
+        }
     }
 
     @StandardException
     public static class NotLoggedInWithBasicAuthException extends RuntimeException {
+        @Override
+        public String getMessage() {
+            return "Please login correctly";
+        }
     }
 
     @StandardException
     public static class JWTAuthenticationNeededException extends RuntimeException {
+        @Override
+        public String getMessage() {
+            return "Please login correctly";
+        }
     }
 
     @StandardException
     public static class WrongCodeException extends RuntimeException {
+        @Override
+        public String getMessage() {
+            return "Code is not Correct";
+        }
     }
 
     @StandardException
     public static class PhoneNumberParsingException extends RuntimeException {
+        @Override
+        public String getMessage() {
+            return "Phone number format is not correct";
+        }
     }
 }

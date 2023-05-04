@@ -15,7 +15,8 @@ import java.util.Arrays;
 @Log
 @ControllerAdvice
 public class ErrorHandler {
-    @ExceptionHandler({RegistrationService.UserAlreadyExistsException.class,
+    @ExceptionHandler({
+            RegistrationService.UserAlreadyExistsException.class,
             RegistrationService.JWTAuthenticationNeededException.class,
             RegistrationService.WrongCodeException.class,
             RegistrationService.WrongStepException.class,
@@ -25,21 +26,15 @@ public class ErrorHandler {
     public ProblemDetail registrationErrorHandler(Exception e) {
         log.info(Arrays.toString(e.getStackTrace()));
         log.warning(e.getMessage());
-        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getClass().getSimpleName());
-    }
-    @ExceptionHandler({
-            ProfileService.UserNotFoundException.class,
-            ProfileService.WrongTypeException.class})
-    public ProblemDetail profileErrorHandler(Exception e) {
-        log.info(Arrays.toString(e.getStackTrace()));
-        log.warning(e.getMessage());
-        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getClass().getSimpleName());
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler({
+            ProfileService.UserNotFoundException.class,
+            ProfileService.WrongTypeException.class,
             ConnectRequestService.ConnectionException.class,
             MessageService.ConnectionException.class})
-    public ProblemDetail ConnectionErrorHandler(Exception e) {
+    public ProblemDetail profileErrorHandler(Exception e) {
         log.info(Arrays.toString(e.getStackTrace()));
         log.warning(e.getMessage());
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getClass().getSimpleName());
