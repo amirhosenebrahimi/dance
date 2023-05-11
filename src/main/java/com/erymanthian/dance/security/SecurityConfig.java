@@ -32,6 +32,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                                 .requestMatchers("/auth/register/**").permitAll()
+                                .requestMatchers("/auth/forgot/password").permitAll()
                                 .requestMatchers("/auth/login/phone/**").permitAll()
                                 .requestMatchers("/explorer/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()

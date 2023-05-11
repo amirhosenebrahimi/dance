@@ -1,5 +1,6 @@
 package com.erymanthian.dance.controllers;
 
+import com.erymanthian.dance.dtos.ForgotDto;
 import com.erymanthian.dance.dtos.auth.LoginPhoneSendDto;
 import com.erymanthian.dance.dtos.auth.*;
 import com.erymanthian.dance.services.RegistrationService;
@@ -18,6 +19,21 @@ public class AuthController {
     @GetMapping("/login/email")
     public UserAndToken loginEmail(Authentication authentication) {
         return service.loginEmail(authentication);
+    }
+
+    @PostMapping("/forgot/password")
+    public TokenDto forgotPassword(@RequestBody ForgotDto dto) {
+        return new TokenDto(service.forgot(dto));
+    }
+
+    @PostMapping("/forgot/verify")
+    public TokenDto forgotVerify(Authentication authentication, @RequestBody VerifyInRequest dto) {
+        return new TokenDto(service.verifyForgot(authentication, dto.code()));
+    }
+
+    @PatchMapping("/forgot/change")
+    public void forgotChange(Authentication authentication, @RequestBody PasswordDto dto) {
+        service.changePassword(authentication, dto);
     }
 
     @PostMapping("/login/phone/send")
@@ -146,7 +162,7 @@ public class AuthController {
     }
 
     @PatchMapping("/password")
-    public void changeEmail(Authentication authentication, @RequestBody PasswordDto dto) {
+    public void changePassword(Authentication authentication, @RequestBody PasswordDto dto) {
         service.changePassword(authentication, dto);
     }
 }

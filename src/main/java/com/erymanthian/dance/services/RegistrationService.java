@@ -1,5 +1,6 @@
 package com.erymanthian.dance.services;
 
+import com.erymanthian.dance.dtos.ForgotDto;
 import com.erymanthian.dance.dtos.auth.*;
 import com.erymanthian.dance.entities.auth.Code;
 import com.erymanthian.dance.entities.auth.Company;
@@ -425,6 +426,22 @@ public class RegistrationService {
             User user = userRepository.findById(token.getToken().getClaim(TokenService.USER_ID)).orElseThrow();
             String encoded = encoder.encode(dto.password());
             user.setPassword(encoded);
+        } else throw new JWTAuthenticationNeededException();
+    }
+
+    public String forgot(ForgotDto dto) {
+        User user = userRepository.findByEmail(dto.email()).orElseThrow();
+        sendVerificationEmail(dto.email(), user.getId());
+        return tokenService.generateRegisterToken(user);
+    }
+
+    public String verifyForgot(Authentication authentication, String code) {
+        if (authentication instanceof JwtAuthenticationToken token) {
+            User user = verifyEmail(code, token);
+            Short step = user.getStep();
+            user.setStep(++step);
+            userRepository.save(user);
+            return tokenService.generateVerifyToken(user);
         } else throw new JWTAuthenticationNeededException();
     }
 
